@@ -1,0 +1,179 @@
+<!--
+Students: Ignacio De La Cruz and Guibely De Aguinaga
+Assignment: CS340 Project
+Course: CS340 - Group 39
+Code Citations: ALL code sections within this file uses code from
+https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main/Step%203%20-%20Integrating%20a%20Templating%20Engine%20(Handlebars)
+https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main/Step%204%20-%20Dynamically%20Displaying%20Data
+https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main/Step%205%20-%20Adding%20New%20Data
+https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main/Step%207%20-%20Dynamically%20Deleting%20Data
+https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main/Step%208%20-%20Dynamically%20Updating%20Data
+as the skeleton code.
+-->
+
+<!-- invoice_item.hbs -->
+<h1>Invoice Items</h1>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<main>
+    <section>
+
+
+        {{!-- Create a table --}}
+        <table id="invoice-item-table" border="1" cellpadding="5">
+
+            {{!-- Header section --}}
+            <thead>
+
+                {{!-- For just the first row, we print each key of the row object as a header cell so we
+                know what each column means when the page renders --}}
+                <!--       <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr> -->
+                <tr>
+                    <th>
+                        Invoice Item
+                    </th>
+                    <th>
+                        Invoice Number
+                    </th>
+                    <th>
+                        Product
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th>
+                        Unit Price
+                    </th>
+                    <th>
+                        Delete
+                    </th>
+                </tr>
+            </thead>
+
+            {{!-- Body section --}}
+            <tbody>
+
+                {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+                {{#each data}}
+                <tr data-value="{{this.invoiceItemID}}">
+                    <td>{{this.invoiceItemID}}</td>
+                    <td>{{this.invoiceID}}</td>
+                    <td>{{this.productID}}</td>
+                    <td>{{this.orderQuantity}}</td>
+                    <td>{{this.unitPrice}}</td>
+                    <td><button onclick="deleteInvoiceItem({{this.invoiceItemID}})">Delete</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <script src="./js/delete_invoice_item.js"></script>
+
+        <p>&nbsp;</p>
+        <!-- /views/index.hbs -->
+
+        {{!-- Form to add a record to the table --}}
+        <form id="add-invoice-item-form-ajax">
+            <fieldset>
+                <legend>Add Invoice Item</legend>
+                <p>To add a new invoice item, please enter their information below and click 'Submit'!</p>
+                <p>
+                    <label for="input-invoiceID">Invoice Number: </label>
+                    <!-- <input type="text" name="input-invoiceID" id="input-invoiceID"> -->
+                    <select name="input-invoiceID" id="input-invoiceID" required>
+                        <option value="">Select an Invoice</option>
+                        {{#each invoices}}
+                        <option value="{{this.invoiceID}}">{{this.invoiceID}}</option>
+                        {{/each}}
+                    </select>
+                </p>
+                <p>
+                    <label for="input-productID">Product ID: </label>
+                    <!--  <input type="text" name="input-productID" id="input-productID"> -->
+                    <select name="input-productID" id="input-productID" required>
+                        <option value="">Select a Product</option>
+                        {{#each products}}
+                        <option value="{{this.productID}}">{{this.productName}}</option>
+                        {{/each}}
+                    </select>
+                </p>
+                <p>
+                    <label for="input-orderQuantity">Quantity: </label>
+                    <input type="number" name="input-orderQuantity" id="input-orderQuantity" min="1" required>
+                </p>
+                <p>
+
+                    <label for="input-unitPrice">Unit Price: </label>
+                    <input type="decimal" name="input-unitPrice" id="input-unitPrice" min=".01" required>
+                </p>
+
+                <input type="submit">
+            </fieldset>
+        </form>
+
+        {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+        <script src="./js/add_invoice_item.js"></script>
+
+
+
+        <p>&nbsp;</p>
+        {{!-- Form to update a record to the table --}}
+
+        <form id="update-invoice-item-form-ajax">
+            <fieldset>
+                <legend>Update Invoice Item</legend>
+                <p>To update a specific invoice item select their ID number from the drop-down menu on the left and
+                    update the desired information.</p>
+
+
+                <label for="mySelect">Invoice Item: </label>
+                <select name="update-invoiceItem" id="mySelect" required>
+                    <option value="test">Select an Invoice Item</option>
+                    {{#each data}}
+                    <option value="{{this.invoiceItemID}}">{{this.invoiceItemID}}</option>
+                    {{/each}}
+                </select>
+                {{!-- <p>
+                    <label for="update-invoiceID">Invoice Number: </label>
+                    <!-- <input type="text" name="update-invoiceID" id="update-invoiceID"> -->
+                    <select name="update-invoiceID" id="update-invoiceID" required>
+                        <option value="">Select an Invoice</option>
+                        {{#each invoices}}
+                        <option value="{{this.invoiceID}}">{{this.invoiceID}}</option>
+                        {{/each}}
+                    </select>
+                </p>
+                <p>
+                    <label for="update-productID">Product ID: </label>
+                    <!--  <input type="text" name="update-productID" id="update-productID"> -->
+                    <select name="update-productID" id="update-productID" required>
+                        <option value="">Select a Product</option>
+                        {{#each products}}
+                        <option value="{{this.productID}}">{{this.productName}}</option>
+                        {{/each}}
+                    </select>
+                </p> --}}
+                <p>
+
+                    <label for="update-orderQuantity">Quantity: </label>
+                    <input type="number" name="update-orderQuantity" id="update-orderQuantity" min="1" required>
+                </p>
+                <p>
+
+                    <label for="update-unitPrice">Unit Price: </label>
+                    <input type="decimal" name="update-unitPrice" id="update-unitPrice" min=".01" required>
+                </p>
+                <input type="submit">
+            </fieldset>
+
+        </form>
+
+        <script src="./js/update_invoice_item.js"></script>
+
+
+    </section>
+</main>
